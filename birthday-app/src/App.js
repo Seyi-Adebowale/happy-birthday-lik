@@ -1,0 +1,133 @@
+import React, { useState, useEffect, useRef } from "react";
+import Landing from "./components/Landing";
+import Modal from "./components/Modal";
+import Envelope from "./components/Envelope";
+import Letter from "./components/Letter";
+import Cake from "./components/Cake";
+import Confetti from "./components/Confetti";
+import "./styles.css";
+
+function App() {
+  const [showModal, setShowModal] = useState(false);
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [showEnvelope, setShowEnvelope] = useState(false);
+  const [showLetter, setShowLetter] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
+  const [showCake, setShowCake] = useState(false);
+  const [showViewInbox, setShowViewInbox] = useState(false);
+  const [confettiEnabled, setConfettiEnabled] = useState(true);
+  const [noClickCount, setNoClickCount] = useState(0);
+
+  const audioRef = useRef(new Audio("/birthday.mp3"));
+
+  const messages = [
+    "Hey birthday girl, you have a mail 💌<br>Would you like to open it?",
+    "Come on, it's your birthday!<br>Don’t be shy 😏",
+    "It’s something special prepared just for you 🎁",
+    "I promise you’ll love it 💖",
+    "Seriously, just click YES already 😅",
+    "Well… you have no other choice now 😉",
+  ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowModal(true), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Centralized function to stop audio
+  const stopAudio = () => {
+    const audio = audioRef.current;
+    audio.pause();
+    audio.currentTime = 0;
+  };
+
+  const handleYes = () => {
+    setShowModal(false);
+    setShowEnvelope(true);
+
+    const audio = audioRef.current;
+    audio.loop = true;
+    audio.play().catch(() => console.log("Autoplay blocked"));
+
+    setTimeout(() => {
+      setShowEnvelope(false);
+      setShowLetter(true);
+      setNoClickCount(0);
+    }, 2000);
+  };
+
+  const handleNo = () => {
+    if (messageIndex < messages.length - 1) {
+      setMessageIndex((prev) => prev + 1);
+      setNoClickCount((prev) => prev + 1);
+    }
+  };
+
+  const handleCloseLetter = () => {
+    setShowLetter(false);
+    setShowLanding(false);
+    setShowCake(true);
+
+    stopAudio(); // Stop music when moving to cake
+    setConfettiEnabled(false);
+  };
+
+  const handleCandlesBlown = () => {
+    setConfettiEnabled(true);
+    setShowCake(false);
+    setShowLanding(true);
+    setShowViewInbox(true);
+
+    stopAudio(); // Ensure audio is off when returning to landing
+  };
+
+  const handleViewInbox = () => {
+    stopAudio(); // Stop audio before reopening modal
+    setShowLanding(false);
+    setShowModal(true);
+    setMessageIndex(0);
+  };
+
+  const noBtnScale = Math.max(1 - 0.2 * noClickCount, 0.3); // Minimum scale
+
+  return (
+    <div className="App">
+      {confettiEnabled && <Confetti />}
+
+      {showLanding && !showLetter && !showEnvelope && !showCake && (
+        <div className="landing-wrapper">
+          <Landing />
+          {showViewInbox && (
+            <button
+              className="view-inbox-btn beating"
+              onClick={handleViewInbox}
+            >
+              📬 View Inbox <span className="counter">1</span>
+            </button>
+          )}
+        </div>
+      )}
+
+      {showModal && (
+        <Modal
+          message={messages[messageIndex]}
+          onYes={handleYes}
+          onNo={handleNo}
+          hideNo={messageIndex === messages.length - 1}
+          noBtnScale={noBtnScale}
+        />
+      )}
+
+      {showEnvelope && <Envelope />}
+      {showLetter && <Letter onClose={handleCloseLetter} />}
+      {showCake && (
+        <Cake
+          onFinish={handleCandlesBlown}
+          onBlown={() => setConfettiEnabled(true)}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;
