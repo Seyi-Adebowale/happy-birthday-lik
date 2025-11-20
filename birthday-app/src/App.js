@@ -3,7 +3,6 @@ import Landing from "./components/Landing";
 import Modal from "./components/Modal";
 import Envelope from "./components/Envelope";
 import Letter from "./components/Letter";
-import Cake from "./components/Cake";
 import Confetti from "./components/Confetti";
 import "./styles.css";
 
@@ -13,7 +12,6 @@ function App() {
   const [showEnvelope, setShowEnvelope] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
   const [showLanding, setShowLanding] = useState(true);
-  const [showCake, setShowCake] = useState(false);
   const [showViewInbox, setShowViewInbox] = useState(false);
   const [confettiEnabled, setConfettiEnabled] = useState(true);
   const [noClickCount, setNoClickCount] = useState(0);
@@ -34,7 +32,6 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Centralized function to stop audio
   const stopAudio = () => {
     const audio = audioRef.current;
     audio.pause();
@@ -43,17 +40,26 @@ function App() {
 
   const handleYes = () => {
     setShowModal(false);
-    setShowEnvelope(true);
 
     const audio = audioRef.current;
     audio.loop = true;
     audio.play().catch(() => console.log("Autoplay blocked"));
 
-    setTimeout(() => {
-      setShowEnvelope(false);
-      setShowLetter(true);
-      setNoClickCount(0);
-    }, 2000);
+    // Preload envelope GIF
+    const envelopeImage = new Image();
+    envelopeImage.src = "/envelope.gif"; 
+
+    envelopeImage.onload = () => {
+      // Once loaded, show envelope
+      setShowEnvelope(true);
+
+      // After a delay, move to Letter
+      setTimeout(() => {
+        setShowEnvelope(false);
+        setShowLetter(true);
+        setNoClickCount(0);
+      }, 2000);
+    };
   };
 
   const handleNo = () => {
@@ -63,38 +69,39 @@ function App() {
     }
   };
 
-  const handleCloseLetter = () => {
+  // Go back to landing from Letter
+  const handleBackToLanding = () => {
     setShowLetter(false);
-    setShowLanding(false);
-    setShowCake(true);
+    setShowEnvelope(false);
 
-    stopAudio(); // Stop music when moving to cake
-    setConfettiEnabled(false);
-  };
-
-  const handleCandlesBlown = () => {
-    setConfettiEnabled(true);
-    setShowCake(false);
     setShowLanding(true);
-    setShowViewInbox(true);
+    setShowViewInbox(true); // Keep inbox counter active
 
-    stopAudio(); // Ensure audio is off when returning to landing
+    stopAudio();
   };
 
   const handleViewInbox = () => {
-    stopAudio(); // Stop audio before reopening modal
+    stopAudio();
     setShowLanding(false);
     setShowModal(true);
     setMessageIndex(0);
   };
 
-  const noBtnScale = Math.max(1 - 0.2 * noClickCount, 0.3); // Minimum scale
+  const noBtnScale = Math.max(1 - 0.2 * noClickCount, 0.3);
 
   return (
     <div className="App">
       {confettiEnabled && <Confetti />}
 
-      {showLanding && !showLetter && !showEnvelope && !showCake && (
+      {/* Modern floating back button */}
+      {showLetter && (
+        <i
+          className="fa-solid fa-circle-left app-back-btn"
+          onClick={handleBackToLanding}
+        ></i>
+      )}
+
+      {showLanding && !showLetter && !showEnvelope && (
         <div className="landing-wrapper">
           <Landing />
           {showViewInbox && (
@@ -119,13 +126,7 @@ function App() {
       )}
 
       {showEnvelope && <Envelope />}
-      {showLetter && <Letter onClose={handleCloseLetter} />}
-      {showCake && (
-        <Cake
-          onFinish={handleCandlesBlown}
-          onBlown={() => setConfettiEnabled(true)}
-        />
-      )}
+      {showLetter && <Letter />}
     </div>
   );
 }

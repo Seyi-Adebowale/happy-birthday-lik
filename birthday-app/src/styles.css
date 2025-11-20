@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background: linear-gradient(to bottom right, #ffdde1, #ee9ca7);
   height: 100vh;
   width: 100%;
@@ -15,11 +15,11 @@ body {
 }
 
 h1 {
-  font-family: 'Pacifico', cursive;
+  font-family: "Pacifico", cursive;
   font-size: 3rem;
   color: #fff;
   padding: 10px;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .landing .cake img {
@@ -30,7 +30,7 @@ h1 {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,14 +44,20 @@ h1 {
   max-width: 90vw;
   margin: 20px;
   text-align: center;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   animation: popUp 0.5s ease;
   position: relative;
 }
 
 @keyframes popUp {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .modal-buttons {
@@ -75,7 +81,7 @@ button {
   background: #ff6f61;
   color: #fff;
   font-weight: bold;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   animation: pulse 1s infinite;
 }
 
@@ -149,7 +155,7 @@ button {
   height: 30px;
   background: linear-gradient(to right, #a0522d, #8b4513);
   border-radius: 15px;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.3), 0 3px 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 
@@ -161,7 +167,7 @@ button {
   left: 5px;
   width: 90%;
   height: 20px;
-  background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 10px 10px;
 }
 
@@ -172,7 +178,7 @@ button {
   border-left: 8px solid #c68642;
   border-right: 8px solid #c68642;
   border-radius: 0 0 12px 12px;
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   height: 80vh;
   padding: 20px 15px;
@@ -182,9 +188,17 @@ button {
 }
 
 /* Scrollbar */
-.scroll-body::-webkit-scrollbar { width: 6px; }
-.scroll-body::-webkit-scrollbar-track { background: #ffd1f1; border-radius: 3px; }
-.scroll-body::-webkit-scrollbar-thumb { background: #ff6f61; border-radius: 3px; }
+.scroll-body::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-body::-webkit-scrollbar-track {
+  background: #ffd1f1;
+  border-radius: 3px;
+}
+.scroll-body::-webkit-scrollbar-thumb {
+  background: #ff6f61;
+  border-radius: 3px;
+}
 
 /* Letter Content */
 .letter-content {
@@ -209,8 +223,12 @@ button {
 }
 
 /* Utility */
-.hidden { display: none; }
-.show { display: block; }
+.hidden {
+  display: none;
+}
+.show {
+  display: block;
+}
 
 .close-scroll-btn {
   margin-top: 10px;
@@ -221,7 +239,7 @@ button {
   color: white;
   cursor: pointer;
   border: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, background 0.3s;
   font-family: "Poppins", sans-serif;
 }
@@ -240,7 +258,7 @@ button {
   color: white;
   cursor: pointer;
   border: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, background 0.3s;
   font-family: "Poppins", sans-serif;
   position: relative;
@@ -265,11 +283,16 @@ button {
 
 /* Pulse animation */
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
-
 
 .counter {
   display: inline-block;
@@ -280,133 +303,21 @@ button {
   font-size: 0.8rem;
   font-weight: bold;
 }
-
-
-
-.cake-wrapper {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.cake-container {
-  position: relative;
-  width: 220px;        /* slightly wider */
-  height: 160px;       /* shorter so it’s not a square */
-  margin: 0 auto;
-}
-
-/* Cake Base */
-.cake-body {
-  width: 100%;
-  height: 100px;
-  background: #b5651d;
-  border-radius: 20px;
-  position: absolute;
-  bottom: 0;
-}
-
-/* Frosting */
-.cake-frosting {
-  width: 100%;
-  height: 45px;
-  background: #ff77b4;
-  border-radius: 20px 20px 0 0;
-  position: absolute;
-  bottom: 100px;
-  box-shadow: 0 6px 0 #d6527f;
-}
-
-/* Frosting Drips */
-.cake-drip {
-  width: 28px;
-  background: #ff77b4;
-  position: absolute;
-  top: -12px;
-  border-radius: 14px;
-}
-
-.drip1 { left: 35px; height: 38px; }
-.drip2 { left: 95px; height: 48px; }
-.drip3 { left: 155px; height: 35px; }
-
-/* Candles */
-.candles {
-  position: absolute;
-  top: -30px;                  /* lower so they sit above frosting */
-  left: 50%;
-  transform: translateX(-50%); /* PERFECT CENTER */
-  display: flex;
-  gap: 20px;
-}
-
-.candle {
-  width: 12px;
-  height: 45px;
-  background: white;
-  border-radius: 4px;
-  position: relative;
-}
-
-.candle-stripe {
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    #ff4da6,
-    #ff4da6 5px,
-    white 5px,
-    white 10px
-  );
-  opacity: 0.7;
-}
-
-/* Flame */
-.flame {
-  width: 10px;
-  height: 18px;
-  position: absolute;
-  top: -22px;
-  left: 1px;
+.app-back-btn {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  background-color: #fff;
   border-radius: 50%;
-  background: radial-gradient(circle, #fffbd3 10%, #ffda00 40%, #ff9500 80%);
-  animation: flameFlicker 0.15s infinite;
-  filter: drop-shadow(0 0 8px #ffae00);
+  color: #ff3b2e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 40px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.2s ease;
 }
 
-/* Flame out smoke */
-.flame-out {
-  width: 10px;
-  height: 5px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 50%;
-  position: absolute;
-  top: -5px;
-  left: 1px;
-  animation: smokeFade 0.6s ease-out forwards;
+.app-back-btn:hover {
+  transform: scale(1.1);
 }
 
-/* Animations */
-@keyframes flameFlicker {
-  0% { transform: translateX(0) scale(1); }
-  50% { transform: translateX(1px) scale(1.1); }
-  100% { transform: translateX(-1px) scale(1); }
-}
-
-@keyframes smokeFade {
-  0% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-20px) scale(0.4); }
-}
-
-
-/* Text */
-.instruction {
-  font-size: 18px;
-  margin-top: 20px;
-}
-
-.wish-message {
-  font-size: 20px;
-  margin-top: 15px;
-  color: #ff3cac;
-  font-weight: bold;
-}
