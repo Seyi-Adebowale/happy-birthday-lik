@@ -13,7 +13,6 @@ function App() {
   const [showLetter, setShowLetter] = useState(false);
   const [showLanding, setShowLanding] = useState(true);
   const [showViewInbox, setShowViewInbox] = useState(false);
-  const [confettiEnabled, setConfettiEnabled] = useState(true);
   const [noClickCount, setNoClickCount] = useState(0);
 
   const audioRef = useRef(new Audio("/birthday.mp3"));
@@ -91,7 +90,7 @@ function App() {
 
   return (
     <div className="App">
-      {confettiEnabled && <Confetti />}
+      <Confetti />
 
       {/* Modern floating back button */}
       {showLetter && (
