@@ -57,7 +57,7 @@ function App() {
         setShowEnvelope(false);
         setShowLetter(true);
         setNoClickCount(0);
-      }, 2000);
+      }, 3000);
     };
   };
 
