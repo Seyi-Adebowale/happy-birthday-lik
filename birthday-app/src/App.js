@@ -44,15 +44,12 @@ function App() {
     audio.loop = true;
     audio.play().catch(() => console.log("Autoplay blocked"));
 
-    // Preload envelope GIF
     const envelopeImage = new Image();
-    envelopeImage.src = "/envelope.gif"; 
+    envelopeImage.src = "/envelope.gif";
 
     envelopeImage.onload = () => {
-      // Once loaded, show envelope
       setShowEnvelope(true);
 
-      // After a delay, move to Letter
       setTimeout(() => {
         setShowEnvelope(false);
         setShowLetter(true);
@@ -68,14 +65,11 @@ function App() {
     }
   };
 
-  // Go back to landing from Letter
   const handleBackToLanding = () => {
     setShowLetter(false);
     setShowEnvelope(false);
-
     setShowLanding(true);
-    setShowViewInbox(true); // Keep inbox counter active
-
+    setShowViewInbox(true);
     stopAudio();
   };
 
@@ -92,17 +86,11 @@ function App() {
     <div className="App">
       <Confetti />
 
-      {/* Modern floating back button */}
-      {showLetter && (
-        <i
-          className="fa-solid fa-circle-left app-back-btn"
-          onClick={handleBackToLanding}
-        ></i>
-      )}
-
+      {/* LANDING */}
       {showLanding && !showLetter && !showEnvelope && (
         <div className="landing-wrapper">
           <Landing />
+
           {showViewInbox && (
             <button
               className="view-inbox-btn beating"
@@ -114,6 +102,7 @@ function App() {
         </div>
       )}
 
+      {/* MODAL */}
       {showModal && (
         <Modal
           message={messages[messageIndex]}
@@ -124,8 +113,22 @@ function App() {
         />
       )}
 
+      {/* ENVELOPE */}
       {showEnvelope && <Envelope />}
-      {showLetter && <Letter />}
+
+      {/* LETTER VIEW */}
+      {showLetter && (
+        <div className="letter-view">
+          <div className="letter-header">
+            <i
+              className="fa-solid fa-circle-left app-back-btn"
+              onClick={handleBackToLanding}
+            ></i>
+          </div>
+
+          <Letter />
+        </div>
+      )}
     </div>
   );
 }

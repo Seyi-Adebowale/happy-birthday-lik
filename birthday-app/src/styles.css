@@ -111,29 +111,30 @@ button {
 }
 
 /* ----------------- Envelope ----------------- */
-#envelope-gif {
-  /* display: none; */
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
+.envelope-overlay {
+  position: fixed; /* stays centered on screen even when scrolling */
   top: 0;
   left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex; /* flex centering */
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(135deg, #ffe4ec, #ffd1f1);
   z-index: 500;
 }
 
-#envelope-gif img {
-  max-width: 80vw;
-  max-height: 80vh;
+.envelope-gif {
+  max-width: 80vw;  /* responsive width */
+  max-height: 80vh; /* responsive height */
+  object-fit: contain; /* ensures aspect ratio is maintained */
 }
+
 
 /* ----------------- Scroll Container ----------------- */
 #scroll-container {
   position: relative;
-  width: 80vw;
-  max-width: 400px;
+  width: 90vw;
   margin: 20px auto;
   display: flex;
   flex-direction: column;
@@ -152,6 +153,7 @@ button {
 .scroll-top-bar,
 .scroll-bottom-bar {
   width: 100%;
+  max-width: 450px;
   height: 30px;
   background: linear-gradient(to right, #a0522d, #8b4513);
   border-radius: 15px;
@@ -166,6 +168,7 @@ button {
   top: 5px;
   left: 5px;
   width: 90%;
+  max-width: 450px;
   height: 20px;
   background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 10px 10px;
@@ -180,7 +183,9 @@ button {
   border-radius: 0 0 12px 12px;
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  height: 80vh;
+  
+  max-width: 450px;
+  height: 70vh;
   padding: 20px 15px;
   box-sizing: border-box;
   position: relative;
@@ -304,9 +309,6 @@ button {
   font-weight: bold;
 }
 .app-back-btn {
-  position: fixed;
-  top: 50px;
-  left: 50px;
   background-color: #fff;
   border-radius: 50%;
   color: #ff3b2e;
@@ -321,3 +323,18 @@ button {
   transform: scale(1.1);
 }
 
+.letter-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 2000;
+  /* margin: 30px 0; */
+}
+
+/* Header row */
+.letter-header {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start; /* LEFT alignment */
+}
