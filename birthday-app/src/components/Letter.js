@@ -1,39 +1,66 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import Typewriter from "typewriter-effect";
+import "./Letter.css";
 
-const Letter = () => {
-  const containerRef = useRef();
+const Letter = ({ onBack, showConfetti }) => {
+  const paragraphs = [
+    "Dear Birthday Girl,",
+    "I just want to say how amazing you are. Every day, your smile brightens the world around you, and your kindness touches everyone you meet. You have a heart full of love and a spirit that inspires those lucky enough to know you.",
+    "May your year ahead be filled with dreams coming true, happiness overflowing, and endless love surrounding you. Always remember how special and treasured you are!",
+    "With Love, Your Baby 💖",
+  ];
+
+  const [showEnvelope, setShowEnvelope] = useState(true);
+  const [showLetter, setShowLetter] = useState(false);
 
   useEffect(() => {
-    containerRef.current.classList.add("open");
+    const timer = setTimeout(() => {
+      setShowEnvelope(false);
+      setShowLetter(true);
+    }, 2000); // envelope delay
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div id="scroll-container" className="closed" ref={containerRef}>
-     
-
-      <div className="scroll-top-bar"></div>
-      
-      <div className="scroll-body">
-        <div className="letter-content">
-          <h3>Happy Birthday, X! 🎉</h3>
-
-          <p>Today is all about YOU — the wonderful, amazing, and irreplaceable YOU!</p>
-
-          <p>Wishing you endless smiles, laughter, and love. May your heart be filled with joy, your days with sunshine, and your life with beautiful surprises.</p>
-
-          <p>Every moment with you has been magical, and I hope this year brings even more unforgettable memories, adventures, and happiness your way.</p>
-
-          <p>May your dreams take flight, your wishes come true, and may you always feel loved and celebrated — not just today, but every single day.</p>
-
-          <p>Remember, you are extraordinary, and you make the world brighter just by being in it.</p>
-
-          <p>I love you so much</p>
-
-          <p><strong>— Your Baby 💖</strong></p>
+    <div className="letter-container">
+      {/* Back button fixed */}
+      {showLetter && (
+        <div className="letter-header">
+          <i className="fa-solid fa-circle-left app-back-btn" onClick={onBack}></i>
         </div>
-      </div>
+      )}
 
-      <div className="scroll-bottom-bar"></div>
+      {/* Envelope */}
+      {showEnvelope && (
+        <div className="envelope">
+          <img src="/envelope.gif" alt="Envelope" className="envelope-img" />
+        </div>
+      )}
+
+      {/* Letter Scroll */}
+      {showLetter && (
+        <div className="letter-scroll">
+          {showConfetti && <div className="confetti-placeholder" />}
+          <div className="letter-text">
+            <Typewriter
+              options={{
+                autoStart: true,
+                loop: false,
+                delay: 40,
+              }}
+              onInit={(typewriter) => {
+                paragraphs.forEach((p, idx) => {
+                  typewriter.typeString(p);
+                  if (idx !== paragraphs.length - 1) {
+                    typewriter.typeString("<br><br>");
+                  }
+                });
+                typewriter.start();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

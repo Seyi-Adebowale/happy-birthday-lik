@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Landing from "./components/Landing";
 import Modal from "./components/Modal";
-import Envelope from "./components/Envelope";
+import TreasureGame from "./components/TreasureGame";
+import ReasonsCards from "./components/ReasonsCards";
 import Letter from "./components/Letter";
 import Confetti from "./components/Confetti";
 import "./styles.css";
@@ -9,11 +10,17 @@ import "./styles.css";
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [messageIndex, setMessageIndex] = useState(0);
-  const [showEnvelope, setShowEnvelope] = useState(false);
+
+  const [showTreasureGame, setShowTreasureGame] = useState(false);
+  const [treasureFound, setTreasureFound] = useState(false);
+
+  const [showReasons, setShowReasons] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
+
   const [showLanding, setShowLanding] = useState(true);
-  const [showViewInbox, setShowViewInbox] = useState(false);
   const [noClickCount, setNoClickCount] = useState(0);
+
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const audioRef = useRef(new Audio("/birthday.mp3"));
 
@@ -31,31 +38,11 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const stopAudio = () => {
-    const audio = audioRef.current;
-    audio.pause();
-    audio.currentTime = 0;
-  };
-
   const handleYes = () => {
     setShowModal(false);
-
-    const audio = audioRef.current;
-    audio.loop = true;
-    audio.play().catch(() => console.log("Autoplay blocked"));
-
-    const envelopeImage = new Image();
-    envelopeImage.src = "/envelope.gif";
-
-    envelopeImage.onload = () => {
-      setShowEnvelope(true);
-
-      setTimeout(() => {
-        setShowEnvelope(false);
-        setShowLetter(true);
-        setNoClickCount(0);
-      }, 2500);
-    };
+    setShowLanding(false);
+    // Start treasure game without music
+    setShowTreasureGame(true);
   };
 
   const handleNo = () => {
@@ -65,40 +52,43 @@ function App() {
     }
   };
 
+  const noBtnScale = Math.max(1 - 0.2 * noClickCount, 0.3);
+
+const handleTreasureFound = () => {
+  // This is called when user clicks "There's more..." in TreasureGame
+  setShowConfetti(false);  // stop confetti
+  setShowTreasureGame(false);
+  setShowReasons(true);    // show reasons screen
+};
+
+
+
+  const handleReasonsComplete = () => {
+    setShowReasons(false);
+    setShowLetter(true);
+
+    // Start music now that letter is displayed
+    const audio = audioRef.current;
+    audio.loop = true;
+    audio.play().catch(() => console.log("Autoplay blocked"));
+  };
+
   const handleBackToLanding = () => {
     setShowLetter(false);
-    setShowEnvelope(false);
     setShowLanding(true);
-    setShowViewInbox(true);
-    stopAudio();
+    const audio = audioRef.current;
+    audio.pause();
+    audio.currentTime = 0;
   };
-
-  const handleViewInbox = () => {
-    stopAudio();
-    setShowLanding(false);
-    setShowModal(true);
-    setMessageIndex(0);
-  };
-
-  const noBtnScale = Math.max(1 - 0.2 * noClickCount, 0.3);
 
   return (
     <div className="App">
-      <Confetti />
+      {showConfetti && <Confetti />}
 
       {/* LANDING */}
-      {showLanding && !showLetter && !showEnvelope && (
+      {showLanding && (
         <div className="landing-wrapper">
           <Landing />
-
-          {showViewInbox && (
-            <button
-              className="view-inbox-btn beating"
-              onClick={handleViewInbox}
-            >
-              📬 View Inbox <span className="counter">1</span>
-            </button>
-          )}
         </div>
       )}
 
@@ -113,22 +103,19 @@ function App() {
         />
       )}
 
-      {/* ENVELOPE */}
-      {showEnvelope && <Envelope />}
-
-      {/* LETTER VIEW */}
-      {showLetter && (
-        <div className="letter-view">
-          <div className="letter-header">
-            <i
-              className="fa-solid fa-circle-left app-back-btn"
-              onClick={handleBackToLanding}
-            ></i>
-          </div>
-
-          <Letter />
-        </div>
+      {/* TREASURE MINI-GAME */}
+      {showTreasureGame && (
+        <TreasureGame
+          onTreasureFound={handleTreasureFound}
+          setConfetti={setShowConfetti}
+        />
       )}
+
+      {/* REASONS */}
+      {showReasons && <ReasonsCards onComplete={handleReasonsComplete} />}
+
+      {/* LETTER */}
+      {showLetter && <Letter onBack={handleBackToLanding} />}
     </div>
   );
 }

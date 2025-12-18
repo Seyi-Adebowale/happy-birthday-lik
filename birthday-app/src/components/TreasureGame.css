@@ -1,0 +1,118 @@
+.card img.treasure-photo {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.card {
+  width: 100px;
+  height: 140px;
+  background-color: #ffb6c1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  perspective: 1000px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card.treasure {
+  animation: treasureBounce 1s infinite alternate;
+}
+
+.card.sparkle::after {
+  content: "";
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  animation: sparkle 1s infinite;
+  pointer-events: none;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.3) rotate(180deg); opacity: 0.5; }
+}
+
+@keyframes treasureBounce {
+  0% { transform: scale(1) rotateY(180deg); }
+  50% { transform: scale(1.1) rotateY(180deg); }
+  100% { transform: scale(1) rotateY(180deg); }
+}
+
+/* Treasure Success Modal */
+.treasure-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.treasure-modal-content {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: modalFade 0.5s ease-in-out;
+}
+
+.proceed-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff1493;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.proceed-btn:hover {
+  transform: scale(1.05);
+}
+
+@keyframes modalFade {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.treasure-modal {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.treasure-modal.hide {
+  opacity: 0;
+}

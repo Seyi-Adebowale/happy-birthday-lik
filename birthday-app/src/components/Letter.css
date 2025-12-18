@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+.letter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-top: 20px;
+}
+
+/* Back button fixed at top of viewport */
+.letter-header {
+  position: fixed;
+  top: 10px;
+  left: 0;
+  width: 100vw;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  background: transparent;
+  z-index: 10;
+}
+
+.app-back-btn {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Envelope before opening */
+.envelope {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.envelope-img {
+  width: 100%;
+  height: auto;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Letter scroll container */
+.letter-scroll {
+  width: 400px;
+  max-width: 90%;
+  max-height: 70vh;
+  background: #fff8e1;
+  border: 2px solid #f3e5ab;
+  border-radius: 15px;
+  padding: 25px 20px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 24px;
+  line-height: 1.5;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  position: relative;
+  overflow-y: auto;
+  text-align: left;
+  animation: slideIn 1s ease-out;
+}
+
+/* Typewriter last line bold */
+.letter-text {
+  display: flex;
+  flex-direction: column;
+}
+.letter-text:last-child {
+  font-weight: bold;
+}
+
+/* Confetti placeholder */
+.confetti-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@keyframes slideIn {
+  0% { transform: translateY(-50px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Scrollbar Styling */
+.letter-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.letter-scroll::-webkit-scrollbar-track {
+  background: #ac8901;
+  border-radius: 10px;
+}
+
+.letter-scroll::-webkit-scrollbar-thumb {
+  background-color: #df9903;
+  border-radius: 10px;
+  border: 3px solid #f3e5ab;
+}
+
+.letter-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #f5b547;
+}
+
+/* For Firefox */
+.letter-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #ce8d02 #f3e5ab;
+}
