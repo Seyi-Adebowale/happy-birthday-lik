@@ -1,31 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./ReasonsCards.css";
 
 const ReasonsCards = ({ onComplete }) => {
   const reasons = [
     "You make me smile every day 😊",
-    "Your kindness inspires me ❤️",
+    "Your generosity is truly priceless ❤️",
     "You’re my rock in tough times 💪",
-    "I love your laugh 😄",
-    "You make life magical ✨",
+    "Your laugh lights up the room 😄",
+    "You bring magic to the little moments ✨",
   ];
 
   const [flipped, setFlipped] = useState([]);
-  const [allFlipped, setAllFlipped] = useState(false); // track if all cards are flipped
+  const [allFlipped, setAllFlipped] = useState(false);
+
+  // Web Audio API refs
+  const audioContextRef = useRef(null);
+  const flipBufferRef = useRef(null);
+
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext ||
+      window.webkitAudioContext)();
+
+    const loadSound = async (url, bufferRef) => {
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      bufferRef.current = await audioContextRef.current.decodeAudioData(
+        arrayBuffer
+      );
+    };
+
+    // Preload sound
+    loadSound("/card-flip.mp3", flipBufferRef);
+  }, []);
+
+  const playFlip = () => {
+    if (!flipBufferRef.current) return;
+    const source = audioContextRef.current.createBufferSource();
+    source.buffer = flipBufferRef.current;
+    source.connect(audioContextRef.current.destination);
+    source.start(0);
+  };
 
   const handleClick = (i) => {
     if (flipped.includes(i)) return;
+
+    playFlip();
 
     const newFlipped = [...flipped, i];
     setFlipped(newFlipped);
 
     if (newFlipped.length === reasons.length) {
-      setAllFlipped(true); // all cards flipped, show button
+      setAllFlipped(true);
     }
   };
 
   const handleOpenLetter = () => {
-    onComplete(); // now proceed to the letter
+    onComplete();
   };
 
   return (

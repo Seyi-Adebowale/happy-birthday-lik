@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.letter-scroll {
+  font-family: 'Playfair Display', serif;
+}
+
 
 .letter-container {
   display: flex;
@@ -22,16 +27,10 @@
   z-index: 10;
 }
 
-.app-back-btn {
-  font-size: 2rem;
-  cursor: pointer;
-  color: #333;
-}
-
 /* Envelope before opening */
 .envelope {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,8 +56,7 @@
   border: 2px solid #f3e5ab;
   border-radius: 15px;
   padding: 25px 20px;
-  font-family: 'Dancing Script', cursive;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 1.5;
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   position: relative;
@@ -67,12 +65,17 @@
   animation: slideIn 1s ease-out;
 }
 
-/* Typewriter last line bold */
-.letter-text {
-  display: flex;
-  flex-direction: column;
+.letter-text p {
+  margin-bottom: 25px;
 }
-.letter-text:last-child {
+
+/* Default state while typing */
+.letter-text p:last-child {
+  font-weight: normal;
+}
+
+/* Bold after typing */
+.typing-done p:last-child {
   font-weight: bold;
 }
 
@@ -116,3 +119,24 @@
   scrollbar-width: thin;
   scrollbar-color: #ce8d02 #f3e5ab;
 }
+.letter-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.letter-wrapper canvas#confetti-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;          
+  pointer-events: none; 
+}
+
+.letter-wrapper .letter-scroll {
+  position: relative;
+  z-index: 1;      
+}
+

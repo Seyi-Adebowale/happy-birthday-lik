@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./TreasureGame.css";
 
 const TreasureGame = ({ onTreasureFound, setConfetti }) => {
@@ -11,96 +11,121 @@ const TreasureGame = ({ onTreasureFound, setConfetti }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Web Audio API refs
+  const audioContextRef = useRef(null);
+  const flipBufferRef = useRef(null);
+  const treasureBufferRef = useRef(null);
+
+  useEffect(() => {
+    audioContextRef.current =
+      new (window.AudioContext || window.webkitAudioContext)();
+
+    const loadSound = async (url, bufferRef) => {
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      bufferRef.current = await audioContextRef.current.decodeAudioData(
+        arrayBuffer
+      );
+    };
+
+    loadSound("/card-flip.mp3", flipBufferRef);
+    loadSound("/treasure.mp3", treasureBufferRef);
+  }, []);
+
+  const playSound = (bufferRef) => {
+    if (!bufferRef.current) return;
+    const source = audioContextRef.current.createBufferSource();
+    source.buffer = bufferRef.current;
+    source.connect(audioContextRef.current.destination);
+    source.start(0);
+  };
+
   const handleCardClick = (i) => {
     if (flippedCards.includes(i) || found) return;
 
-    setFlippedCards([...flippedCards, i]);
-    setAttempts(attempts + 1);
+    playSound(flipBufferRef);
+
+    const newFlipped = [...flippedCards, i];
+    setFlippedCards(newFlipped);
+    setAttempts(prev => prev + 1);
 
     if (i === treasureIndex) {
       setFound(true);
+      playSound(treasureBufferRef);
 
-      // Fun success messages based on attempts
+      // Celebrant-focused messages based on attempts
       let msg = "";
       if (attempts === 0)
-        msg = "🎉 Wow! You uncovered the ultimate treasure on your first try! 🌟";
+        msg = "🎉 Wow! The ultimate treasure has been uncovered on the very first try… here you are—the priceless treasure of the day! 💖✨";
       else if (attempts <= 3)
-        msg = `💖 Treasure found! Only ${attempts + 1} tries! 😎`;
+        msg = `💎 After ${attempts + 1} tries, the sparkling treasure is revealed… it’s you—the priceless treasure of the day! 🌟`;
       else if (attempts <= 6)
-        msg = `✨ Finally! It took ${attempts + 1} tries, but the treasure is yours! 😉`;
+        msg = `✨ It took ${attempts + 1} tries, but finally… here you are—the priceless treasure of the day! 😍💖`;
+      else if (attempts <= 8)
+        msg = `😎 ${attempts + 1} tries later… behold the priceless treasure of the day! 💕💎`;
       else
-        msg = `😂 Took ${attempts + 1} tries, but the real treasure was worth it! 💕`;
+        msg = `😅 ${attempts + 1} tries, yet every single one was worth it… because the priceless treasure of the day has been found—you! 💖✨`;
 
       setMessage(msg);
+      setConfetti(true);
 
-      const flipDuration = 1500; // card flip duration in ms
-      const modalDelay = 2500;   // confetti duration before modal
-
-      // Step 1: Wait for flip animation
-      setTimeout(() => {
-        // Step 2: Start confetti + sparkle
-        setConfetti(true);
-
-        // Step 3: Wait before showing modal
-        setTimeout(() => {
-          setShowSuccessModal(true);
-        }, modalDelay);
-      }, flipDuration);
+      setTimeout(() => setShowSuccessModal(true), 3000);
     }
   };
 
-const handleProceed = () => {
-  setShowSuccessModal(false); // hide modal
-  onTreasureFound();          // triggers App.js to show ReasonsCards
-  setConfetti(false);         // stop confetti
-};
-
-
-
-
+  const handleProceed = () => {
+    setShowSuccessModal(false);
+    setConfetti(false);
+    onTreasureFound();
+  };
 
   return (
     <div className="treasure-game">
       <h2>
         {!found
           ? "Just a moment… can you uncover the hidden treasure? 🎁"
-          : "🏆 Treasure Found!"}
+          : "🏆 The Priceless Treasure of the Day!"}
       </h2>
 
       <div className="cards-grid">
-        {cards.map((_, i) => (
-          <div
-            key={i}
-            className={`card ${flippedCards.includes(i) ? "flipped" : ""} ${
-              found && i === treasureIndex ? "treasure sparkle" : ""
-            }`}
-            style={{
-              transition: i === treasureIndex ? "transform 1.5s" : "transform 0.6s",
-            }}
-            onClick={() => handleCardClick(i)}
-          >
-            {flippedCards.includes(i) &&
-              (i === treasureIndex ? (
-                <img
-                  src="https://clipartmax.com/png/middle/170-1708409_headshot-placeholder-silhouette-gender-neutral.png"
-                  alt="Treasure"
-                  className="treasure-photo"
-                />
-              ) : (
-                "❌"
-              ))}
-          </div>
-        ))}
+        {cards.map((_, i) => {
+          const isFlipped = flippedCards.includes(i);
+          const isTreasure = i === treasureIndex;
+
+          return (
+            <div
+              key={i}
+              className={`card ${isFlipped ? "flipped" : ""} ${
+                found && isTreasure ? "treasure sparkle" : ""
+              }`}
+              onClick={() => handleCardClick(i)}
+            >
+              <div className="card-inner">
+                <div className="card-front">❓</div>
+                <div className="card-back">
+                  {isTreasure ? (
+                    <img
+                      src="https://clipartmax.com/png/middle/170-1708409_headshot-placeholder-silhouette-gender-neutral.png"
+                      alt="Treasure"
+                      className="treasure-photo"
+                    />
+                  ) : (
+                    "❌"
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Success Modal */}
       {showSuccessModal && (
         <div className="treasure-modal">
           <div className="treasure-modal-content">
-            <h3>🎉 You Found the Treasure! 🎉</h3>
+            <h3>You’ve Uncovered the Greatest Treasure!</h3>
             <p>{message}</p>
-            <button className="proceed-btn" onClick={handleProceed}>
-              There’s more… ✨
+            <button className="proceed-btn beating" onClick={handleProceed}>
+              There's more ... ✨
             </button>
           </div>
         </div>

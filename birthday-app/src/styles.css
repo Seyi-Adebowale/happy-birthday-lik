@@ -107,7 +107,7 @@ button {
   width: 100vw;
   height: 100dvh;
   pointer-events: none;
-  z-index: 1000;
+  /* z-index: 1000; */
 }
 
 /* ----------------- Envelope ----------------- */
