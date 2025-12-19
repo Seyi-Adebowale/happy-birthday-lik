@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Typewriter from "typewriter-effect";
 import "./Letter.css";
+
+const ENVELOPE_URL = "/envelope.gif";
 
 const Letter = ({ onBack, onLetterShown }) => {
   const paragraphs = [
@@ -13,22 +15,36 @@ const Letter = ({ onBack, onLetterShown }) => {
   const [showEnvelope, setShowEnvelope] = useState(true);
   const [showLetter, setShowLetter] = useState(false);
   const [typingDone, setTypingDone] = useState(false);
+  const [envelopeLoaded, setEnvelopeLoaded] = useState(false);
 
-  React.useEffect(() => {
-    // Show envelope for 2 seconds, then show letter
+  // Preload envelope image
+  useEffect(() => {
+    const img = new Image();
+    img.src = ENVELOPE_URL;
+    img.onload = () => setEnvelopeLoaded(true);
+    img.onerror = () => {
+      console.error("Envelope failed to load");
+      setEnvelopeLoaded(true);
+    };
+  }, []);
+
+  // Show letter only after envelope is fully loaded
+  useEffect(() => {
+    if (!envelopeLoaded) return;
+
     const timer = setTimeout(() => {
       setShowEnvelope(false);
       setShowLetter(true);
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [envelopeLoaded]);
 
   return (
     <div className="letter-container">
       {showEnvelope && (
         <div className="envelope">
-          <img src="/envelope.gif" alt="Envelope" className="envelope-img" />
+          <img src={ENVELOPE_URL} alt="Envelope" className="envelope-img" />
         </div>
       )}
 
@@ -55,7 +71,6 @@ const Letter = ({ onBack, onLetterShown }) => {
                   typewriter.callFunction(() => setTypingDone(true));
                   typewriter.start();
 
-                  // Trigger confetti after typing starts
                   onLetterShown?.();
                 }}
               />

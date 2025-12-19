@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Landing from "./components/Landing";
 import Modal from "./components/Modal";
 import TreasureGame from "./components/TreasureGame";
@@ -39,8 +39,25 @@ function App() {
     "Well… you have no other choice now 😉",
   ];
 
+  // Preload treasure and envelope images on app mount
+  useEffect(() => {
+    const treasureImg = new Image();
+    treasureImg.src =
+      "https://clipartmax.com/png/middle/170-1708409_headshot-placeholder-silhouette-gender-neutral.png";
+
+    const envelopeImg = new Image();
+    envelopeImg.src = "/envelope.gif";
+
+    treasureImg.onload = () => console.log("Treasure image preloaded");
+    envelopeImg.onload = () => console.log("Envelope GIF preloaded");
+
+    treasureImg.onerror = () =>
+      console.error("Failed to preload treasure image");
+    envelopeImg.onerror = () => console.error("Failed to preload envelope GIF");
+  }, []);
+
   // Show modal after 4 seconds
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => setShowModal(true), 4000);
     return () => clearTimeout(timer);
   }, []);
@@ -142,8 +159,7 @@ function App() {
         <div className="letter-wrapper">
           <Letter
             onBack={handleBackToLanding}
-            showConfetti={showConfetti}
-            setShowConfetti={setShowConfetti}
+            onLetterShown={() => console.log("Letter typing started")}
           />
         </div>
       )}

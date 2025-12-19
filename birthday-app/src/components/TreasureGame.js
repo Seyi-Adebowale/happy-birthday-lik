@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./TreasureGame.css";
 
+const TREASURE_IMAGE =
+  "https://clipartmax.com/png/middle/170-1708409_headshot-placeholder-silhouette-gender-neutral.png";
+
 const TreasureGame = ({ onTreasureFound, setConfetti }) => {
-  const cards = Array(9).fill(null);
-  const [treasureIndex] = useState(() => Math.floor(Math.random() * 9));
+  const cards = Array(6).fill(null);
+  const [treasureIndex] = useState(() => Math.floor(Math.random() * 6));
 
   const [flippedCards, setFlippedCards] = useState([]);
   const [found, setFound] = useState(false);
@@ -11,7 +14,6 @@ const TreasureGame = ({ onTreasureFound, setConfetti }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Web Audio API refs
   const audioContextRef = useRef(null);
   const flipBufferRef = useRef(null);
   const treasureBufferRef = useRef(null);
@@ -44,24 +46,23 @@ const TreasureGame = ({ onTreasureFound, setConfetti }) => {
     if (flippedCards.includes(i) || found) return;
 
     playSound(flipBufferRef);
-
     const newFlipped = [...flippedCards, i];
     setFlippedCards(newFlipped);
-    setAttempts(prev => prev + 1);
+    setAttempts((prev) => prev + 1);
 
     if (i === treasureIndex) {
       setFound(true);
       playSound(treasureBufferRef);
 
-      // Celebrant-focused messages based on attempts
       let msg = "";
       if (attempts === 0)
-        msg = "🎉 Wow! The ultimate treasure has been uncovered on the very first try… here you are — the priceless treasure of the day! 💖✨";
-      else if (attempts <= 3)
+        msg =
+          "🎉 Wow! The ultimate treasure has been uncovered on the very first try… here you are — the priceless treasure of the day! 💖✨";
+      else if (attempts <= 2)
         msg = `💎 After ${attempts + 1} tries, the sparkling treasure is revealed… it’s you — the priceless treasure of the day! 🌟`;
-      else if (attempts <= 6)
+      else if (attempts <= 4)
         msg = `✨ It took ${attempts + 1} tries, but finally… here you are — the priceless treasure of the day! 😍💖`;
-      else if (attempts <= 8)
+      else if (attempts <= 6)
         msg = `😎 ${attempts + 1} tries later… behold the priceless treasure of the day! 💕💎`;
       else
         msg = `😅 ${attempts + 1} tries, yet every single one was worth it… because the priceless treasure of the day has been found—you! 💖✨`;
@@ -69,7 +70,8 @@ const TreasureGame = ({ onTreasureFound, setConfetti }) => {
       setMessage(msg);
       setConfetti(true);
 
-      setTimeout(() => setShowSuccessModal(true), 3000);
+      // Always show modal after 3s (image is already preloaded)
+      setTimeout(() => setShowSuccessModal(true), 5000);
     }
   };
 
@@ -105,7 +107,7 @@ const TreasureGame = ({ onTreasureFound, setConfetti }) => {
                 <div className="card-back">
                   {isTreasure ? (
                     <img
-                      src="https://clipartmax.com/png/middle/170-1708409_headshot-placeholder-silhouette-gender-neutral.png"
+                      src={TREASURE_IMAGE}
                       alt="Treasure"
                       className="treasure-photo"
                     />

@@ -68,11 +68,11 @@ const ReasonsCards = ({ onComplete }) => {
             className={`reason-card ${flipped.includes(i) ? "flipped" : ""}`}
             onClick={() => handleClick(i)}
           >
-            <div className="card-front">
+            <div className="reason-card-front">
               <span className="emoji">💌</span>
             </div>
 
-            <div className="card-back">{reason}</div>
+            <div className="reason-card-back">{reason}</div>
           </div>
         ))}
       </div>
