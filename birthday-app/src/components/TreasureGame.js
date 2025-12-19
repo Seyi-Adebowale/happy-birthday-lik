@@ -56,11 +56,11 @@ const TreasureGame = ({ onTreasureFound, setConfetti }) => {
       // Celebrant-focused messages based on attempts
       let msg = "";
       if (attempts === 0)
-        msg = "🎉 Wow! The ultimate treasure has been uncovered on the very first try… here you are—the priceless treasure of the day! 💖✨";
+        msg = "🎉 Wow! The ultimate treasure has been uncovered on the very first try… here you are — the priceless treasure of the day! 💖✨";
       else if (attempts <= 3)
-        msg = `💎 After ${attempts + 1} tries, the sparkling treasure is revealed… it’s you—the priceless treasure of the day! 🌟`;
+        msg = `💎 After ${attempts + 1} tries, the sparkling treasure is revealed… it’s you — the priceless treasure of the day! 🌟`;
       else if (attempts <= 6)
-        msg = `✨ It took ${attempts + 1} tries, but finally… here you are—the priceless treasure of the day! 😍💖`;
+        msg = `✨ It took ${attempts + 1} tries, but finally… here you are — the priceless treasure of the day! 😍💖`;
       else if (attempts <= 8)
         msg = `😎 ${attempts + 1} tries later… behold the priceless treasure of the day! 💕💎`;
       else
